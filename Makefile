@@ -20,7 +20,7 @@ INSTALL_OBJS	= tinyirc
 MANDIR		= $(DESTDIR)$(man_prefix)/man/man1
 BINDIR		= $(DESTDIR)$(exec_prefix)/bin
 
-INCLUDES	= -I/usr/include/ncurses 
+INCLUDES	= -I/usr/include
 
 SERVER = irc.freenode.org
 PORT = 6667
@@ -47,6 +47,13 @@ aix:
 
 posix:
 	$(MAKE) tinyirc CFLAGS="-O2 -m486 -DPOSIX" LDFLAGS="-s" LIBS=-ltermcap
+
+iz2s:
+#	$(MAKE) tinyirc CFLAGS="-Os -DPOSIX -fomit-frame-pointer" LDFLAGS="-s" LIBS=../ncurses-5.7/lib/libncurses.so
+	$(MAKE) tinyirc CFLAGS="-fomit-frame-pointer -fno-strict-aliasing -ffunction-sections -fdata-sections -Os -DPOSIX -DZIPIT_Z2" LDFLAGS="-s -Wl,--gc-sections" LIBS=../ncurses-5.7/lib/libncurses.so
+
+wrt:
+	$(MAKE) tinyirc CFLAGS="$(INCLUDES) -fomit-frame-pointer -fno-strict-aliasing -ffunction-sections -fdata-sections -Os -DPOSIX -DZIPIT_Z2" LDFLAGS="-s -Wl,--gc-sections" LIBS="-L/usr/local/lib -lncurses"
 
 gnu:
 	$(MAKE) tinyirc CFLAGS="-g -O2 -pipe -DPOSIX -Wall -Wunused -Wformat" \
